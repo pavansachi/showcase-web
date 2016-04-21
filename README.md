@@ -11,10 +11,14 @@ mvn
 
 ######Server
 ```sh
+* Spring Java Configuration
 * Spring Core
 * Spring Mvc
+* Spring Validations
 * Spring Data JPA
+* Spring Security
 * Hibernate
-* Spring Java Configuration
+* Jackson serializer
+* Spring Junit
 ```
 [Github]: <https://github.com/pavansachi/showcase-web>
