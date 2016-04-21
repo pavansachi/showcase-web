@@ -11,6 +11,7 @@ mvn
 
 ######Server
 ```sh
+* Java 1.8
 * Spring Java Configuration
 * Spring Core
 * Spring Mvc
