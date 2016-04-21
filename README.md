@@ -9,8 +9,9 @@
 mvn
 ```
 #### Technologies used?
+
+######Server
 ```sh
-####Server
 * Spring Core
 * Spring Mvc
 * Spring Data JPA
