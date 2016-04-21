@@ -2,7 +2,6 @@
 ---
 * Author: Pavan Sachi
 * [Github]
-* [My website] 
 
 #### How to build project?
 ```sh
