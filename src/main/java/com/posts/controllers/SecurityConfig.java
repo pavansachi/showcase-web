@@ -1,19 +1,25 @@
 package com.posts.controllers;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-
-import com.posts.services.security.ProfileUserDetailService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+//	@Autowired
+//	private ProfileUserDetailService userDetailService;
+	
 	@Autowired
-	private ProfileUserDetailService userDetailService;
+	private DataSource dataSource;
 	
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -23,7 +29,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //		.and()
 //		.withUser("deepika").password("deepikas").roles("USER");
 		
-		auth.userDetailsService(userDetailService);
+//		auth.userDetailsService(userDetailService);
+		
+		auth.jdbcAuthentication()
+		.passwordEncoder(passwordEncoder())
+		.dataSource(dataSource)
+		.usersByUsernameQuery("select username, password, enabled from profileuser where username=?")
+		.authoritiesByUsernameQuery("select username, role_name from profileuser u inner join userrole r on (u.id = r.profileUser_id) where username=?");
 		
 	}
 	
@@ -41,13 +53,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	        .authorizeRequests()
 	        .antMatchers("/profile/create").permitAll()
 		       // .antMatchers("/login","/login/form**","/register","/logout").permitAll()
-		        .anyRequest().permitAll()
+		        .anyRequest().access("hasRole('ROLE_USER')")
             .and()
             .formLogin()
 //	            .loginPage("/login/form")
 //	            .loginProcessingUrl("/login")
 //	            .failureUrl("/login/form?error")
 	            .permitAll();
+	}
+	
+	@Bean
+	public PasswordEncoder passwordEncoder(){
+		PasswordEncoder encoder = new BCryptPasswordEncoder();
+		return encoder;
 	}
 
 }

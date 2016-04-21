@@ -12,7 +12,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-public class Comment extends DataEntity {
+public class Comment {
 
 	@Id
 	@GeneratedValue

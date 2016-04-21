@@ -7,7 +7,7 @@ import com.posts.exceptions.ProfileDataException;
 import com.posts.exceptions.ProfileServiceException;
 import com.posts.services.ProfileService;
 import com.posts.services.data.ProfileDAO;
-import com.posts.utils.PasswordEncoder;
+import com.posts.utils.SecurityUtil;
 import com.posts.vo.data.Profile;
 import com.posts.vo.data.ProfileUser;
 import com.posts.vo.data.UserRole;
@@ -24,7 +24,7 @@ public class ProfileServiceImpl implements ProfileService {
 
 			ProfileUser user = newProfile.getUser();
 
-			user.setHashedPassword(PasswordEncoder.getHashedPassword(user.getPassword()));
+			user.setPassword(SecurityUtil.getHashedPassword(user.getPassword()));
 
 			user.setProfile(newProfile);
 

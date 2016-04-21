@@ -3,6 +3,7 @@ package com.posts.vo.data;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -24,6 +25,7 @@ public class Profile {
 	@OneToOne(mappedBy="profile", cascade=CascadeType.ALL)
 	private ProfileUser user;
 	
+	@Column(name="CREATE_DATE")
 	private Date createDate;
 	
 	public Date getCreateDate() {
@@ -34,6 +36,7 @@ public class Profile {
 		this.createDate = createDate;
 	}
 
+	@Column(name="UPDATE_DATE")
 	private Date updateDate;
 
 	public Date getUpdateDate() {

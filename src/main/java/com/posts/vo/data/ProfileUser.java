@@ -5,13 +5,13 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -32,16 +32,16 @@ public class ProfileUser {
 	
 	@NotNull
 	@Size(min=6, max=10)
-	@Column(unique=true)
+	@Column(name="USERNAME", unique=true)
 	private String username;
 	
 	@NotNull
-	@Size(min=6, max=6)
+	@Size(min=6, max=60)
 	@JsonProperty(access=Access.WRITE_ONLY)
-	@Transient
+	@Column(name="PASSWORD")
 	private String password;
 	
-	@Column(unique=true)
+	@Column(name="EMAIL", unique=true)
 	private String email;
 	
 //	@JsonManagedReference
@@ -56,7 +56,7 @@ public class ProfileUser {
 //		this.tweets = tweets;
 //	}
 
-	@OneToMany(mappedBy="profileUser", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="profileUser", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private Set<UserRole> roles;
 
 	public Set<UserRole> getRoles() {
@@ -67,17 +67,18 @@ public class ProfileUser {
 		this.roles = roles;
 	}
 
-	@JsonProperty(access=Access.WRITE_ONLY)
-	private String hashedPassword;
+//	@JsonProperty(access=Access.WRITE_ONLY)
+//	private String hashedPassword;
 	
-	public String getHashedPassword() {
-		return hashedPassword;
-	}
+//	public String getHashedPassword() {
+//		return hashedPassword;
+//	}
+//
+//	public void setHashedPassword(String hashedPassword) {
+//		this.hashedPassword = hashedPassword;
+//	}
 
-	public void setHashedPassword(String hashedPassword) {
-		this.hashedPassword = hashedPassword;
-	}
-
+	@Column(name="ENABLED")
 	private boolean isActive;
 	
 	@PrePersist

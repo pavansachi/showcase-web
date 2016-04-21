@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
-public class Tweet extends DataEntity {
+public class Tweet {
 
 	@Id
 	@GeneratedValue

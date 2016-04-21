@@ -1,6 +1,7 @@
 package com.posts.vo.data;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,8 +16,10 @@ public class UserRole {
 
 	@Id
 	@GeneratedValue
+	@Column(name="ROLE_ID")
 	private long id;
 	
+	@Column(name="ROLE_NAME")
 	private String name;
 	
 	public String getName() {
