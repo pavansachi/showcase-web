@@ -10,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
 public class Comment {
@@ -21,6 +23,7 @@ public class Comment {
 	private String message;
 
 	@JsonBackReference
+	@JsonProperty(access=Access.WRITE_ONLY)
 	@ManyToOne(cascade=CascadeType.ALL)
 	@PrimaryKeyJoinColumn
 	private Tweet tweetEntity;

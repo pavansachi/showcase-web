@@ -1,10 +1,14 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page session="true"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <html>
+<head>
+<title>Admin</title>
+</head>
 <body>
-	<c:if test="${pageContext.request.userPrincipal.name != null}">
-		<h2>Welcome : ${pageContext.request.userPrincipal.name} 
-                 | <a href="<c:url value="/logout" />" > Logout</a></h2>  
-	</c:if>
+<h1>Admin</h1>
+<form action="/logout" method="post">
+          <input type="submit" value="Sign in as different user" /> 
+          <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+</form>   
 </body>
 </html>

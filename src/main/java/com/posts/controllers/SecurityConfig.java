@@ -11,6 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+
+import com.posts.utils.CustomCSRFTokenRepository;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -49,14 +52,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		
 		 http
-	        .csrf().disable()
+		 // test csrf
+	        .csrf().csrfTokenRepository(csrfTokenRepository())
+	        .and()
 	        .authorizeRequests()
 	        .antMatchers("/profile/create").permitAll()
 		       // .antMatchers("/login","/login/form**","/register","/logout").permitAll()
-		        .anyRequest().access("hasRole('ROLE_USER')")
+		    .anyRequest().access("hasRole('ROLE_USER')")
             .and()
             .formLogin()
-//	            .loginPage("/login/form")
+	            .loginPage("/login")
 //	            .loginProcessingUrl("/login")
 //	            .failureUrl("/login/form?error")
 	            .permitAll();
@@ -66,6 +71,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public PasswordEncoder passwordEncoder(){
 		PasswordEncoder encoder = new BCryptPasswordEncoder();
 		return encoder;
+	}
+	
+	public CsrfTokenRepository csrfTokenRepository() {
+		
+		CsrfTokenRepository repo = new CustomCSRFTokenRepository();
+		
+		return repo;
+		
 	}
 
 }
