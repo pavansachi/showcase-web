@@ -6,6 +6,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.Ordered;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -21,7 +22,7 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @ComponentScan(basePackages="com")
 @EnableWebMvc
-//@EnableAspectJAutoProxy
+@EnableAspectJAutoProxy
 //@Order(2)
 public class MvcConfiguration extends WebMvcConfigurerAdapter {
 
@@ -69,7 +70,7 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
 	
 	@Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/admin").setViewName("admin");
+        registry.addViewController("/register").setViewName("register");
         registry.addViewController("/login").setViewName("login");
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
     }

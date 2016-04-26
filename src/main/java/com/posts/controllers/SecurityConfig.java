@@ -53,10 +53,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		 http
 		 // test csrf
-	        .csrf().csrfTokenRepository(csrfTokenRepository())
-	        .and()
+	      //  .csrf().csrfTokenRepository(csrfTokenRepository())
+//	        .and()
 	        .authorizeRequests()
 	        .antMatchers("/profile/create").permitAll()
+	        .antMatchers("/register").permitAll()
 		       // .antMatchers("/login","/login/form**","/register","/logout").permitAll()
 		    .anyRequest().access("hasRole('ROLE_USER')")
             .and()

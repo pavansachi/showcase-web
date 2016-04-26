@@ -1,6 +1,9 @@
 package com.posts.controllers;
 
+import java.util.Set;
+
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,10 +14,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.posts.exceptions.ProfileServiceException;
 import com.posts.services.ProfileService;
+import com.posts.utils.aspects.Timed;
 import com.posts.vo.data.Profile;
 import com.posts.vo.data.ServiceResponse;
 import com.posts.vo.data.UserRole;
@@ -47,6 +52,43 @@ public class ProfileController {
 			return new ResponseEntity<ServiceResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
+	}
+	
+	@Timed
+	@RequestMapping(path="/profile/create", method=RequestMethod.POST, consumes="application/x-www-form-urlencoded")
+	public @ResponseBody ResponseEntity<ServiceResponse> createProfile(@RequestParam("username") String username,
+			@RequestParam("password") String password, @RequestParam("email") String email, @RequestParam("roles") Set<String> roles)  {
+
+		ServiceResponse response = null;
+
+		Profile profile = null;
+			
+		try {
+
+			profile = profileService.createProfile(username, password, email, roles);
+
+			response = new ServiceResponse("The profile is successfully created", profile);
+			return new ResponseEntity<ServiceResponse>(response, HttpStatus.OK);
+
+		}
+		catch (ProfileServiceException e) {
+			e.printStackTrace();
+			return new ResponseEntity<ServiceResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		catch (Exception e) {
+			
+			e.printStackTrace();
+			
+			if (e instanceof ValidationException) {
+				
+				ServiceResponse errorResponse = new ServiceResponse(e.getMessage());
+				
+				return new ResponseEntity<ServiceResponse>(errorResponse, HttpStatus.BAD_REQUEST);
+			}
+			
+			return new ResponseEntity<ServiceResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
 	}
 	
 	@RequestMapping(path="/role/create", method=RequestMethod.POST, consumes="application/json", produces="application/json")

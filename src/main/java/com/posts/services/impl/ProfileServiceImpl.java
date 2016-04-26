@@ -1,5 +1,11 @@
 package com.posts.services.impl;
 
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +40,15 @@ public class ProfileServiceImpl implements ProfileService {
 			e.printStackTrace();
 			throw new ProfileServiceException(e);
 		}
+		catch (Exception e) {
+			e.printStackTrace();
+			
+			if (e instanceof ValidationException) {
+				throw new ValidationException(e);
+			}
+			
+			throw new ProfileServiceException(e);
+		}
 
 		return newProfile;
 	}
@@ -51,6 +66,40 @@ public class ProfileServiceImpl implements ProfileService {
 		}
 
 		return newRole;
+	}
+
+	@Override
+	public Profile createProfile(String username, String password, String email, Set<String> roles)
+			throws ProfileServiceException {
+		
+		Profile profile = new Profile();
+		
+		ProfileUser user = new ProfileUser();
+		user.setUsername(username);
+		user.setPassword(password);
+		user.setEmail(email);
+		
+		// java 8 lambdas
+		
+		Set<UserRole> userRoles = roles.stream().map(new Function<String, UserRole>() {
+
+			@Override
+			public UserRole apply(String role) {
+				
+				UserRole urole = new UserRole();
+				urole.setName(role);
+				urole.setProfileUser(user);
+				return urole;
+			}
+		}).collect(Collectors.toSet());
+		
+		profile.setUser(user);
+		user.setRoles(userRoles);
+		user.setProfile(profile);
+		
+		profile = createProfile(profile);
+		
+		return profile;
 	}
 
 }

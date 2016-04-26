@@ -1,10 +1,12 @@
 package com.posts.services.data.impl;
 
+import javax.validation.ValidationException;
+
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.posts.exceptions.ProfileDataException;
-import com.posts.exceptions.ProfileUserExistsException;
 import com.posts.services.data.ProfileDAO;
 import com.posts.services.jpa.ProfileRepository;
 import com.posts.services.jpa.ProfileUserRepository;
@@ -31,22 +33,18 @@ public class ProfileDAOImpl implements ProfileDAO {
 
 			profileRepo.save(newProfile);
 			
-			ProfileUser user = newProfile.getUser();
-			
-			for (UserRole role: user.getRoles()) {
-				role.setProfileUser(user);
-			}
-			
 			return newProfile;
 
 		} 
-//		catch (org.hibernate.exception.ConstraintViolationException e) {
-////			throw new ProfileUserExistsException();
-//		}
 		catch (Exception e) {
 			
 			e.printStackTrace();
-			throw new ProfileDataException(e);
+			
+			if (e instanceof ConstraintViolationException) {
+				throw new ValidationException(e.getMessage());
+			}
+			
+			throw new ProfileDataException();
 		}
 	}
 

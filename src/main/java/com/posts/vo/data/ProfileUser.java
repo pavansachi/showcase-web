@@ -1,5 +1,6 @@
 package com.posts.vo.data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -31,6 +32,10 @@ public class ProfileUser {
 	@GeneratedValue(generator="gen")
 	@Id
 	private long id;
+	
+	public ProfileUser() {
+		roles = new HashSet<>();
+	}
 	
 	@NotNull
 	@Size(min=6, max=10)
