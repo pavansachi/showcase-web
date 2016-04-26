@@ -18,6 +18,7 @@ mvn
 * Spring Validations
 * Spring Data JPA
 * Spring Security
+* SpringAOP
 * Hibernate
 * Jackson serializer
 * Spring Junit
